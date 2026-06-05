@@ -6,79 +6,237 @@
 <title>SAKURA Game Shop</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
-body {
-font-family: Arial, sans-serif;
-background-color: #1a1a2e;
-color: white;
-text-align: center;
-padding: 20px;
-}
-/* ကုန်ပစ္စည်း ကတ်ပြားပုံစံ ဒီဇိုင်း */
-.card {
-background-color: #162447;
-padding: 15px;
-border-radius: 10px;
-margin: 15px auto;
-max-width: 300px;
-box-shadow: 0px 4px 8px rgba(0,0,0,0.2);
-}
-/* ဝယ်ယူမည် ခလုတ်ဒီဇိုင်း */
-.buy-btn {
-background-color: #e43f5a;
-color: white;
-border: none;
-padding: 10px 20px;
-border-radius: 5px;
-cursor: pointer;
-font-weight: bold;
-width: 100%;
-margin-top: 10px;
-}
-.buy-btn:hover {
-background-color: #ff4a6b;
-}
+  /* ------------------- CSS တည်ဆောက်ခြင်း ------------------- */
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #121826;
+    color: white;
+    margin: 0;
+    padding: 0;
+    padding-bottom: 70px; /* Navigation bar အတွက် နေရာချန်ရန် */
+  }
+
+  /* Header ပုံစံ */
+  .header-banner {
+    background: linear-gradient(135deg, #1f4068, #162447);
+    padding: 20px;
+    text-align: center;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+  }
+
+  /* စာမျက်နှာများ ခွဲခြားခြင်း */
+  .page { display: none; padding: 15px; }
+  .active-page { display: block; }
+
+  /* ၃ တန်းစီ Grid စနစ် */
+  .grid-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+  .card {
+    background-color: #1b263b;
+    border: 1px solid #415a77;
+    border-radius: 12px;
+    padding: 10px 5px;
+    text-align: center;
+    cursor: pointer;
+    position: relative;
+  }
+  .badge {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: #e43f5a;
+    font-size: 8px;
+    padding: 2px 5px;
+    border-radius: 5px;
+  }
+  .card img { width: 40px; height: 40px; }
+  .old-price { color: #8d99ae; text-decoration: line-through; font-size: 10px; }
+  .new-price { color: #e43f5a; font-weight: bold; font-size: 13px; }
+
+  /* ဝယ်ယူမည့် Form ပေါ့ပ်အပ်ပုံစံ */
+  .modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.8);
+    justify-content: center; align-items: center;
+    z-index: 100;
+  }
+  .modal-content {
+    background-color: #1b263b;
+    padding: 20px;
+    border-radius: 15px;
+    width: 85%; max-width: 350px;
+    box-sizing: border-box;
+  }
+  input, select {
+    width: 100%; padding: 10px; margin: 8px 0;
+    background: #0f172a; border: 1px solid #415a77;
+    color: white; border-radius: 8px; box-sizing: border-box;
+  }
+  .submit-btn {
+    background-color: #0088cc; color: white; border: none;
+    padding: 12px; width: 100%; border-radius: 8px; font-weight: bold;
+  }
+
+  /* Order History Table ပုံစံ */
+  table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+  th, td { padding: 10px; border: 1px solid #415a77; text-align: left; font-size: 12px; }
+  th { background-color: #1f4068; }
+  .status-pending { color: #ffb703; }
+
+  /* အောက်ခြေ Navigation Bar ဒီဇိုင်း */
+  .nav-bar {
+    position: fixed; bottom: 0; left: 0; width: 100%;
+    background-color: #0f172a; display: flex;
+    justify-content: space-around; padding: 12px 0;
+    border-top: 1px solid #1e293b; z-index: 10;
+  }
+  .nav-item { color: #8d99ae; cursor: pointer; font-size: 12px; font-weight: bold; }
+  .nav-item.active { color: #0088cc; }
 </style>
 </head>
 <body>
 
-<h1>🐒 Monkey Store 🐒</h1>
-<p>Mobile Legends Diamonds Top-Up</p>
+  <!-- Header -->
+  <div class="header-banner">
+    <h2>🐒 MONKEY RECHARGE </h2>
+    <p style="margin:0; font-size:12px; color:#e2e8f0;">Mobile Legends Diamonds Top-Up</p>
+  </div>
 
-<div class="card">
-    <h3>💎 11 Diamonds</h3>
-    <p>Price: 900 MMK</p>
-    <button class="buy-btn" onclick="buyDiamonds('11 Diamonds', '900 MMK')">ဝယ်ယူမည်</button>
-</div>
+  <!-- ------------------- ၁။ SHOP PAGE ------------------- -->
+  <div id="shop-page" class="page active-page">
+    <div class="grid-container">
+      <!-- ကတ်ပြား ၁ -->
+      <div class="card" onclick="openOrderModal('Diamond 11', '831 MMK')">
+        <div class="badge">Promo</div>
+        <img src="https://img.icons8.com/external-flat-icons-inspirational-three-barba-silhouette/64/000000/external-diamond-casino-flat-icons-inspirational-three-barba-silhouette.png">
+        <div style="font-size:11px;">Diamond 11</div>
+        <div class="old-price">900 MMK</div>
+        <div class="new-price">831 MMK</div>
+      </div>
+      <!-- ကတ်ပြား ၂ -->
+      <div class="card" onclick="openOrderModal('Diamond 86', '5,249 MMK')">
+        <div class="badge">Promo</div>
+        <img src="https://img.icons8.com/external-flat-icons-inspirational-three-barba-silhouette/64/000000/external-diamond-casino-flat-icons-inspirational-three-barba-silhouette.png">
+        <div style="font-size:11px;">Diamond 86</div>
+        <div class="old-price">5,600 MMK</div>
+        <div class="new-price">5,249 MMK</div>
+      </div>
+      <!-- ကတ်ပြား ၃ -->
+      <div class="card" onclick="openOrderModal('Weekly Pass', '6,100 MMK')">
+        <div class="badge">Hot</div>
+        <img src="https://img.icons8.com/external-flat-icons-inspirational-three-barba-silhouette/64/000000/external-diamond-casino-flat-icons-inspirational-three-barba-silhouette.png">
+        <div style="font-size:11px;">Weekly Pass</div>
+        <div class="old-price">6,800 MMK</div>
+        <div class="new-price">6,100 MMK</div>
+      </div>
+    </div>
+  </div>
 
-<div class="card">
-    <h3>💎 22 Diamonds</h3>
-    <p>Price: 1700 MMK</p>
-    <button class="buy-btn" onclick="buyDiamonds('22 Diamonds', '1700 MMK')">ဝယ်ယူမည်</button>
-</div>
+  <!-- ------------------- ၂။ MESSAGE (HISTORY) PAGE ------------------- -->
+  <div id="message-page" class="page">
+    <h3>📋 သင်မှာယူခဲ့သော မှတ်တမ်းများ</h3>
+    <table>
+      <thead>
+        <tr><th>Game ID</th><th>ပစ္စည်း</th><th>ဈေးနှုန်း</th><th>Status</th></tr>
+      </thead>
+      <tbody id="history-table-body">
+        <!-- JavaScript ကနေ ဒီနေရာမှာ လာဖြည့်ပေးပါလိမ့်မယ် -->
+      </tbody>
+    </table>
+  </div>
 
-<div class="card">
-    <h3>💎 33 Diamonds</h3>
-    <p>Price: 2600 MMK</p>
-    <button class="buy-btn" onclick="buyDiamonds('33 Diamonds', '2600 MMK')">ဝယ်ယူမည်</button>
-</div>
+  <!-- ------------------- ၃။ ORDER MODAL (POPUP FORM) ------------------- -->
+  <div id="orderModal" class="modal">
+    <div class="modal-content">
+      <h3 id="modalProductTitle" style="margin-top:0;">ဝယ်ယူရန်</h3>
+      <label>Game ID</label>
+      <input type="number" id="gameId" placeholder="ဥပမာ - 12345678" required>
+      
+      <label>Zone ID</label>
+      <input type="number" id="zoneId" placeholder="ဥပမာ - 1234" required>
 
-<script>
-const tg = window.Telegram.WebApp;
-tg.expand();
+      <label>ငွေလွှဲမည့်စနစ်</label>
+      <select id="paymentMethod">
+        <option value="Kpay">Kpay (09123456789)</option>
+        <option value="WaveMoney">WavePay (09987654321)</option>
+      </select>
 
-// ဝယ်ယူတဲ့အခါ ဘယ်ပစ္စည်းလဲဆိုတာ ခွဲခြားသိအောင် ပြင်ဆင်ထားတဲ့ စနစ်
-function buyDiamonds(diamondName, price) {
-    tg.showPopup({
-        title: 'Order တင်ရန် အတည်ပြုပါ',
-        message: diamondName + ' ကို ' + price + ' ဖြင့် ဝယ်ယူရန် သေချာပါသလား?',
-        buttons: [{type: 'ok', text: 'ဝယ်ယူမည်'}, {type: 'cancel', text: 'မဝယ်တော့ပါ'}]
-    });
-}
-</script>
+      <button class="submit-btn" onclick="submitOrder()">အတည်ပြုပြီး Order တင်မည်</button>
+      <button class="submit-btn" style="background:#e43f5a; margin-top:5px;" onclick="closeModal()">ပိတ်မည်</button>
+    </div>
+  </div>
+
+  <!-- ------------------- ၄။ BOTTOM NAVIGATION BAR ------------------- -->
+  <div class="nav-bar">
+    <div class="nav-item active" onclick="switchPage('shop-page', this)">🛒 SHOP</div>
+    <div class="nav-item" onclick="switchPage('message-page', this)">📋 HISTORY</div>
+  </div>
+
+  <!-- ------------------- JAVASCRIPT LOGIC ------------------- -->
+  <script>
+    const tg = window.Telegram.WebApp;
+    tg.expand();
+
+    let selectedProduct = "";
+    let selectedPrice = "";
+
+    // စာမျက်နှာ အကူးအပြောင်း လုပ်ဆောင်ချက်
+    function switchPage(pageId, element) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
+      document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+      
+      document.getElementById(pageId).classList.add('active-page');
+      element.classList.add('active');
+    }
+
+    // ဖြည့်စွက်ရမည့် Form ကို ဖွင့်ခြင်း
+    function openOrderModal(product, price) {
+      selectedProduct = product;
+      selectedPrice = price;
+      document.getElementById('modalProductTitle').innerText = product + " - " + price;
+      document.getElementById('orderModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+      document.getElementById('orderModal').style.display = 'none';
+    }
+
+    // Order တင်လိုက်ချိန်တွင် အလုပ်လုပ်မည့် စနစ်
+    function submitOrder() {
+      const gId = document.getElementById('gameId').value;
+      const zId = document.getElementById('zoneId').value;
+      const pay = document.getElementById('paymentMethod').value;
+
+      if(!gId || !zId) {
+        alert("Game ID နှင့် Zone ID ကို ပြည့်စုံစွာ ဖြည့်ပေးပါခင်ဗျာ။");
+        return;
+      }
+
+      // ဗီဒီယိုထဲကလိုမျိုး Table ထဲကို ဒေတာအသစ် သွားထည့်ခြင်း
+      const tbody = document.getElementById('history-table-body');
+      const row = `<tr><td>${gId}(${zId})</td><td>${selectedProduct}</td><td>${selectedPrice}</td><td class="status-pending">Pending</td></tr>`;
+      tbody.innerHTML += row;
+
+      // Telegram Bot ထဲကို အချက်အလက် လှမ်းပို့ခြင်း (tg.sendData)
+      const orderData = {
+        gameId: gId,
+        zoneId: zId,
+        product: selectedProduct,
+        price: selectedPrice,
+        payment: pay
+      };
+      
+      tg.sendData(JSON.stringify(orderData)); // ဤနေရာတွင် ဒေတာများကို Bot ဆီ ပို့ပေးပါသည်
+      
+      closeModal();
+      alert("Order တင်ခြင်း အောင်မြင်ပါသည်။ ဆိုင်မှ စစ်ဆေးပြီး မိနစ်ပိုင်းအတွင်း ထည့်သွင်းပေးပါမည်။");
+    }
+  </script>
 </body>
 </html>
-<div class = "card">    
-    <h3> 💎 44 Diamonds</h3>
-    <p>price: 3400 MMK </p>
-    <button class= "buy-btn" onclick="buydiamonds('44 Diamonds', '3400 MMK ')">ဝယ်ယူမည်</button>
-</div>
