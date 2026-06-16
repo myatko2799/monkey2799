@@ -7,250 +7,280 @@
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
 body {
-font-family: Arial, sans-serif;
-background-color: #f0f2f5; /* နောက်ခံအရောင်အလင်း */
-color: #333;
-margin: 0;
-padding: 10px;
-text-align: center;
+  font-family: Arial, sans-serif;
+  background-color: #121826; /* ဗီဒီယိုထဲကလို ညမှောင်ရောင် ပြောင်းပေးထားပါတယ် */
+  color: white;
+  margin: 0;
+  padding: 10px;
+  padding-bottom: 70px;
+  text-align: center;
 }
 h1 {
-font-size: 20px;
-color: #0088cc;
-margin-top: 10px;
+  font-size: 20px;
+  color: #0088cc;
+  margin-top: 10px;
 }
 
-/* တစ်တန်းကို ၃ ခုစီ စီပေးမည့် Grid စနစ် (Table ပုံစံ) */
+/* တစ်တန်းကို ၃ ခုစီ စီပေးမည့် Grid စနစ် */
 .grid-container {
-display: grid;
-grid-template-columns: repeat(3, 1fr); /* ဘယ်/ညာ ၃ ခု အညီအမျှခွဲခြင်း */
-gap: 8px; /* ကတ်ပြားတစ်ခုချင်းစီရဲ့ ကြားအကွာအဝေး */
-padding: 5px;
-max-width: 500px;
-margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  padding: 5px;
+  max-width: 500px;
+  margin: 0 auto;
 }
 
 /* ကတ်ပြားတစ်ခုချင်းစီရဲ့ ဒီဇိုင်း */
 .card {
-background-color: white;
-border: 1px solid #ddd;
-border-radius: 8px;
-padding: 10px 5px;
-box-shadow: 0px 2px 4px rgba(0,0,0,0.05);
-cursor: pointer;
-position: relative;
-transition: transform 0.2s;
+  background-color: #1b263b;
+  border: 1px solid #415a77;
+  border-radius: 8px;
+  padding: 10px 5px;
+  box-shadow: 0px 2px 4px rgba(0,0,0,0.2);
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.2s;
 }
 .card:active {
-transform: scale(0.95); /* နှိပ်လိုက်ရင် တုန်သွားမည့်ပုံစံ */
+  transform: scale(0.95);
 }
 
-/* အပေါ်ထိပ်က "မစောင့်ရပါ" စာသားလေး */
 .badge {
-position: absolute;
-top: 4px;
-right: 4px;
-background-color: #28a745;
-color: white;
-font-size: 8px;
-padding: 2px 4px;
-border-radius: 3px;
-font-weight: bold;
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background-color: #28a745;
+  color: white;
+  font-size: 8px;
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-weight: bold;
 }
 
-/* စိန်ပုံနေရာ */
 .diamond-img {
-width: 45px;
-height: 45px;
-margin: 5px auto;
-display: block;
+  width: 45px;
+  height: 45px;
+  margin: 5px auto;
+  display: block;
 }
 
 .title {
-font-size: 11px;
-font-weight: bold;
-color: #444;
-margin: 4px 0;
+  font-size: 11px;
+  font-weight: bold;
+  color: #e2e8f0;
+  margin: 4px 0;
 }
 
-/* ဈေးနှုန်းအဟောင်း (စာသားဖြတ်ထားသည်) */
 .old-price {
-font-size: 10px;
-color: #dc3545;
-text-decoration: line-through; /* စာသားကို ဖြတ်ကြောင်းခြစ်ခြင်း */
-margin: 2px 0;
+  font-size: 10px;
+  color: #dc3545;
+  text-decoration: line-through;
+  margin: 2px 0;
 }
 
-/* ဈေးနှုန်းအသစ် */
 .new-price {
-font-size: 12px;
-font-weight: bold;
-color: #111;
-margin: 2px 0;
+  font-size: 12px;
+  font-weight: bold;
+  color: #e43f5a;
+  margin: 2px 0;
 }
+
+/* စာမျက်နှာခွဲစနစ် */
+.page { display: none; padding: 10px; }
+.active-page { display: block; }
+
+/* Order Form Modal (Popup) ဒီဇိုင်း */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0,0,0,0.8);
+  justify-content: center; align-items: center;
+  z-index: 100;
+}
+.modal-content {
+  background-color: #1b263b;
+  padding: 20px;
+  border-radius: 15px;
+  width: 85%; max-width: 350px;
+  box-sizing: border-box;
+  text-align: left;
+}
+input, select {
+  width: 100%; padding: 10px; margin: 8px 0;
+  background: #0f172a; border: 1px solid #415a77;
+  color: white; border-radius: 8px; box-sizing: border-box;
+}
+.submit-btn {
+  background-color: #0088cc; color: white; border: none;
+  padding: 12px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer;
+}
+
+/* Table ဒီဇိုင်း */
+table { width: 100%; border-collapse: collapse; margin-top: 15px; color: white; }
+th, td { padding: 10px; border: 1px solid #415a77; text-align: left; font-size: 12px; }
+th { background-color: #1f4068; }
+.status-pending { color: #ffb703; }
+
+/* အောက်ခြေ Navigation Bar */
+.nav-bar {
+  position: fixed; bottom: 0; left: 0; width: 100%;
+  background-color: #0f172a; display: flex;
+  justify-content: space-around; padding: 12px 0;
+  border-top: 1px solid #1e293b; z-index: 10;
+}
+.nav-item { color: #8d99ae; cursor: pointer; font-size: 12px; font-weight: bold; }
+.nav-item.active { color: #0088cc; }
 </style>
 </head>
 <body>
 
 <h1>🐒 MONKEY RECHARGE 🐒</h1>
-<p style="font-size: 12px; color: #666; margin-bottom: 15px;">Mobile Legends Diamonds Top-Up</p>
+<p style="font-size: 12px; color: #a0aec0; margin-bottom: 15px;">Mobile Legends Diamonds Top-Up</p>
 
-<!-- စိန်ကတ်ပြားများ စီမည့်နေရာ -->
-<div class="grid-container">
+<div id="shop-page" class="page active-page">
+  <div class="grid-container">
+      <div class="card" onclick="buyDiamonds('Diamond 11', '831 ကျပ်')">
+          <div class="badge">မစောင့်ရပါ</div>
+          <img class="diamond-img" src="https://img.icons8.com/external-flat-icons-inspirational-three-barba-silhouette/64/000000/external-diamond-casino-flat-icons-inspirational-three-barba-silhouette.png" alt="diamond">
+          <div class="title">Diamond 11</div>
+          <div class="old-price">900 ကျပ်</div>
+          <div class="new-price">831 ကျပ်</div>
+      </div>
 
-    <!-- Card 1 -->
-    <div class="card" onclick="buyDiamonds('Diamond 11', '831 ကျပ်')">
-        <div class="badge">မစောင့်ရပါ</div>
-        <img class="diamond-img" src="https://img.icons8.com/external-flat-icons-inspirational-three-barba-silhouette/64/000000/external-diamond-casino-flat-icons-inspirational-three-barba-silhouette.png" alt="diamond">
-        <div class="title">Diamond 11</div>
-        <div class="old-price">900 ကျပ်</div>
-        <div class="new-price">831 ကျပ်</div>
-    </div>
+      <div class="card" onclick="buyDiamonds('Diamond 22', '1,561 ကျပ်')">
+          <div class="badge">မစောင့်ရပါ</div>
+          <img class="diamond-img" src="https://img.icons8.com/external-flat-icons-inspirational-three-barba-silhouette/64/000000/external-diamond-casino-flat-icons-inspirational-three-barba-silhouette.png" alt="diamond">
+          <div class="title">Diamond 22</div>
+          <div class="old-price">1700 ကျပ်</div>
+          <div class="new-price">1561 ကျပ်</div>
+      </div>
 
-    <!-- Card 2 -->
-    <div class="card" onclick="buyDiamonds('Diamond 22', '1,561 ကျပ်')">
-        <div class="badge">မစောင့်ရပါ</div>
-        <img class="diamond-img" src="https://img.icons8.com/external-flat-icons-inspirational-three-barba-silhouette/64/000000/external-diamond-casino-flat-icons-inspirational-three-barba-silhouette.png" alt="diamond">
-        <div class="title">Diamond 22</div>
-        <div class="old-price">1700 ကျပ်</div>
-        <div class="new-price">1561 ကျပ်</div>
-    </div>
+      <div class="card" onclick="buyDiamonds('Diamond 33', '2,388 ကျပ်')">
+          <div class="badge">မစောင့်ရပါ</div>
+          <img class="diamond-img" src="https://img.icons8.com/external-flat-icons-inspirational-three-barba-silhouette/64/000000/external-diamond-casino-flat-icons-inspirational-three-barba-silhouette.png" alt="diamond">
+          <div class="title">Diamond 33</div>
+          <div class="old-price">2600 ကျပ်</div>
+          <div class="new-price">2388 ကျပ်</div>
+      </div>
 
-    <!-- Card 3 -->
-    <div class="card" onclick="buyDiamonds('Diamond 33', '2,388 ကျပ်')">
-        <div class="badge">မစောင့်ရပါ</div>
-        <img class="diamond-img" src="https://img.icons8.com/external-flat-icons-inspirational-three-barba-silhouette/64/000000/external-diamond-casino-flat-icons-inspirational-three-barba-silhouette.png" alt="diamond">
-        <div class="title">Diamond 33</div>
-        <div class="old-price">2600 ကျပ်</div>
-        <div class="new-price">2388 ကျပ်</div>
-    </div>
+      <div class="card" onclick="buyDiamonds('Diamond 44', '3,122 ကျပ်')">
+          <div class="badge">မစောင့်ရပါ</div>
+          <img class="diamond-img" src="https://img.icons8.com/external-flat-icons-inspirational-three-barba-silhouette/64/000000/external-diamond-casino-flat-icons-inspirational-three-barba-silhouette.png" alt="diamond">
+          <div class="title">Diamond 44</div>
+          <div class="old-price">3400 ကျပ်</div>
+          <div class="new-price">3122 ကျပ်</div>
+      </div>
 
-    <!-- Card 4 -->
-    <div class="card" onclick="buyDiamonds('Diamond 44', '3,122 ကျပ်')">
-        <div class="badge">မစောင့်ရပါ</div>
-        <img class="diamond-img" src="https://img.icons8.com/external-flat-icons-inspirational-three-barba-silhouette/64/000000/external-diamond-casino-flat-icons-inspirational-three-barba-silhouette.png" alt="diamond">
-        <div class="title">Diamond 44</div>
-        <div class="old-price">3400 ကျပ်</div>
-        <div class="new-price">3122 ကျပ်</div>
-    </div>
+      <div class="card" onclick="buyDiamonds('Diamond 56', '3,852 ကျပ်')">
+          <div class="badge">မစောင့်ရပါ</div>
+          <img class="diamond-img" src="https://img.icons8.com/external-flat-icons-inspirational-three-barba-silhouette/64/000000/external-diamond-casino-flat-icons-inspirational-three-barba-silhouette.png" alt="diamond">
+          <div class="title">Diamond 56</div>
+          <div class="old-price">4200 ကျပ်</div>
+          <div class="new-price">3852 ကျပ်</div>
+      </div>
 
-    <!-- Card 5 -->
-    <div class="card" onclick="buyDiamonds('Diamond 56', '3,852 ကျပ်')">
-        <div class="badge">မစောင့်ရပါ</div>
-        <div class="badge">မစောင့်ရပါ</div>
-        <img class="diamond-img" src="https://img.icons8.com/external-flat-icons-inspirational-three-barba-silhouette/64/000000/external-diamond-casino-flat-icons-inspirational-three-barba-silhouette.png" alt="diamond">
-        <div class="title">Diamond 56</div>
-        <div class="old-price">4200 ကျပ်</div>
-        <div class="new-price">3852 ကျပ်</div>
-    </div>
+      <div class="card" onclick="buyDiamonds('Diamond 86', '5,249 ကျပ်')">
+          <div class="badge">မစောင့်ရပါ</div>
+          <img class="diamond-img" src="https://img.icons8.com/external-flat-icons-inspirational-three-barba-silhouette/64/000000/external-diamond-casino-flat-icons-inspirational-three-barba-silhouette.png" alt="diamond">
+          <div class="title">Diamond 86</div>
+          <div class="old-price">5600 ကျပ်</div>
+          <div class="new-price">5249 ကျပ်</div>
+      </div>
+  </div>
+</div>
 
-    <!-- Card 6 -->
-    <div class="card" onclick="buyDiamonds('Diamond 86', '5,249 ကျပ်')">
-        <div class="badge">မစောင့်ရပါ</div>
-        <img class="diamond-img" src="https://img.icons8.com/external-flat-icons-inspirational-three-barba-silhouette/64/000000/external-diamond-casino-flat-icons-inspirational-three-barba-silhouette.png" alt="diamond">
-        <div class="title">Diamond 86</div>
-        <div class="old-price">5600 ကျပ်</div>
-        <div class="new-price">5249 ကျပ်</div>
-    </div>
+<div id="message-page" class="page">
+  <h3>📋 သင်မှာယူခဲ့သော မှတ်တမ်းများ</h3>
+  <table>
+    <thead>
+      <tr><th>Game ID</th><th>ပစ္စည်း</th><th>ဈေးနှုန်း</th><th>Status</th></tr>
+    </thead>
+    <tbody id="history-table-body">
+      </tbody>
+  </table>
+</div>
 
-    <!-- Card 7 -->
-    <div class="card" onclick="buyDiamonds('Diamond 112', '7,603 ကျပ်')">
-        <div class="badge">မစောင့်ရပါ</div>
-        <img class="diamond-img" src="https://img.icons8.com/external-flat-icons-inspirational-three-barba-silhouette/64/000000/external-diamond-casino-flat-icons-inspirational-three-barba-silhouette.png" alt="diamond">
-        <div class="title">Diamond 112</div>
-        <div class="old-price">8300 ကျပ်</div>
-        <div class="new-price">7603 ကျပ်</div>
-    </div>
+<div id="orderModal" class="modal">
+  <div class="modal-content">
+    <h3 id="modalProductTitle" style="margin-top:0; color:#0088cc;">ဝယ်ယူရန်</h3>
+    <label>Game ID</label>
+    <input type="number" id="gameId" placeholder="ဥပမာ - 12345678" required>
+    
+    <label>Zone ID</label>
+    <input type="number" id="zoneId" placeholder="ဥပမာ - 1234" required>
 
-    <!-- Card 8 -->
-    <div class="card" onclick="buyDiamonds('Diamond 172', '10,403 ကျပ်')">
-        <div class="badge">မစောင့်ရပါ</div>
-        <img class="diamond-img" src="https://img.icons8.com/external-flat-icons-inspirational-three-barba-silhouette/64/000000/external-diamond-casino-flat-icons-inspirational-three-barba-silhouette.png" alt="diamond">
-        <div class="title">Diamond 172</div>
-        <div class="old-price">11100 ကျပ်</div>
-        <div class="new-price">10403 ကျပ်</div>
-    </div>
+    <label>ငွေလွှဲမည့်စနစ်</label>
+    <select id="paymentMethod">
+      <option value="Kpay">Kpay (09xxxxxxxxx)</option>
+      <option value="WaveMoney">WavePay (09xxxxxxxxx)</option>
+    </select>
 
-    <!-- Card 9 -->
-    <div class="card" onclick="buyDiamonds('Diamond 257', '15,186 ကျပ်')">
-        <div class="badge">မစောင့်ရပါ</div>
-        <img class="diamond-img" src="https://img.icons8.com/external-flat-icons-inspirational-three-barba-silhouette/64/000000/external-diamond-casino-flat-icons-inspirational-three-barba-silhouette.png" alt="diamond">
-        <div class="title">Diamond 257</div>
-        <div class="old-price">16200 ကျပ်</div>
-        <div class="new-price">15186 ကျပ်</div>
-    </div>
+    <button class="submit-btn" onclick="submitOrder()">အတည်ပြုပြီး Order တင်မည်</button>
+    <button class="submit-btn" style="background:#e43f5a; margin-top:5px;" onclick="closeModal()">ပိတ်မည်</button>
+  </div>
+</div>
 
+<div class="nav-bar">
+  <div class="nav-item active" onclick="switchPage('shop-page', this)">🛒 SHOP</div>
+  <div class="nav-item" onclick="switchPage('message-page', this)">📋 HISTORY</div>
 </div>
 
 <script>
-const tg = window.Telegram.WebApp;
-tg.expand();
+  const tg = window.Telegram.WebApp;
+  tg.expand();
 
-function buyDiamonds(diamondName, price) {
-    tg.showPopup({
-        title: 'Order တင်ရန်',
-        message: diamondName + ' ကို ' + price + ' ဖြင့် ဝယ်ယူရန် သေချာပါသလား?',
-        buttons: [{type: 'ok', text: 'ဝယ်ယူမည်'}, {type: 'cancel', text: 'ပယ်ဖျက်မည်'}]
-    });
-}
+  let selectedProduct = "";
+  let selectedPrice = "";
+
+  // ၁။ Сard ကိုနှိပ်လိုက်ရင် Popup Form ပွင့်လာစေရန် ချိတ်ဆက်မှုစနစ်
+  function buyDiamonds(product, price) {
+    selectedProduct = product;
+    selectedPrice = price;
+    document.getElementById('modalProductTitle').innerText = product + " - " + price;
+    document.getElementById('orderModal').style.display = 'flex';
+  }
+
+  function closeModal() {
+    document.getElementById('orderModal').style.display = 'none';
+  }
+
+  // ၂။ စာမျက်နှာ အကူးအပြောင်း လုပ်ဆောင်ချက်
+  function switchPage(pageId, element) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
+    document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+    
+    document.getElementById(pageId).classList.add('active-page');
+    element.classList.add('active');
+  }
+
+  // ၃။ ManyChat သို့ ဒေတာပေးပို့ပြီး အော်ဒါတင်ခြင်းစနစ်
+  function submitOrder() {
+    const gId = document.getElementById('gameId').value;
+    const zId = document.getElementById('zoneId').value;
+    const pay = document.getElementById('paymentMethod').value;
+
+    if(!gId || !zId) {
+      alert("Game ID နှင့် Zone ID ကို ပြည့်စုံစွာ ဖြည့်ပေးပါခင်ဗျာ။");
+      return;
+    }
+
+    // ဝဘ်ဆိုဒ်ထဲက Table ထဲမှာ Pending ပြသရန် ဒေတာထည့်ခြင်း
+    const tbody = document.getElementById('history-table-body');
+    const row = `<tr><td>${gId}(${zId})</td><td>${selectedProduct}</td><td>${selectedPrice}</td><td class="status-pending">Pending</td></tr>`;
+    tbody.innerHTML += row;
+
+    // ManyChat ဘက်က ဖတ်လို့ရအောင် စာသားပုံစံပြောင်းပြီး ပို့ခြင်း
+    const orderString = `Product: ${selectedProduct}, Price: ${selectedPrice}, GameID: ${gId}, ZoneID: ${zId}, Payment: ${pay}`;
+    
+    tg.sendData(orderString); // ManyChat Trigger ကို သွားနှိုးပါမည်
+
+    closeModal();
+    
+    alert("Order တင်ခြင်း အောင်မြင်ပါသည်။");
+    tg.close(); 
+  }
 </script>
-</body>
-</html>
-<script>
-    const tg = window.Telegram.WebApp;
-    tg.expand();
-
-    let selectedProduct = "";
-    let selectedPrice = "";
-
-    // ၁။ စာမျက်နှာ အကူးအပြောင်း လုပ်ဆောင်ချက် (ဒါလေး ပြန်ထည့်ပေးထားပါတယ်)
-    function switchPage(pageId, element) {
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
-      document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-      
-      document.getElementById(pageId).classList.add('active-page');
-      element.classList.add('active');
-    }
-
-    // ၂။ ဖြည့်စွက်ရမည့် Form ကို ဖွင့်ခြင်း
-    function openOrderModal(product, price) {
-      selectedProduct = product;
-      selectedPrice = price;
-      document.getElementById('modalProductTitle').innerText = product + " - " + price;
-      document.getElementById('orderModal').style.display = 'flex';
-    }
-
-    function closeModal() {
-      document.getElementById('orderModal').style.display = 'none';
-    }
-
-    // ၃။ ManyChat နှင့် ကွက်တိချိတ်ဆက်မိစေရန် ပြင်ဆင်ထားသော စနစ်
-    function submitOrder() {
-      const gId = document.getElementById('gameId').value;
-      const zId = document.getElementById('zoneId').value;
-      const pay = document.getElementById('paymentMethod').value;
-
-      if(!gId || !zId) {
-        alert("Game ID နှင့် Zone ID ကို ပြည့်စုံစွာ ဖြည့်ပေးပါခင်ဗျာ။");
-        return;
-      }
-
-      // ဝဘ်ဆိုဒ်ထဲက Table ထဲမှာ Pending ပြသရန် ဒေတာထည့်ခြင်း
-      const tbody = document.getElementById('history-table-body');
-      const row = `<tr><td>${gId}(${zId})</td><td>${selectedProduct}</td><td>${selectedPrice}</td><td class="status-pending">Pending</td></tr>`;
-      tbody.innerHTML += row;
-
-      // ManyChat ဘက်က ဖတ်လို့ရအောင် စာသားပုံစံ (String) ဖြင့် သေჩာပြောင်းပြီး ပို့ခြင်း
-      const orderString = `Product: ${selectedProduct}, Price: ${selectedPrice}, GameID: ${gId}, ZoneID: ${zId}, Payment: ${pay}`;
-      
-      tg.sendData(orderString); // ဤအမိန့်က ManyChat Trigger ကို သွားနှိုးပါလိမ့်မည်
-
-      closeModal();
-      
-      // ဝယ်သူကို စာပြပြီး Mini App ကို အလိုအလျောက် ပိတ်ချလိုက်ခြင်း
-      alert("Order တင်ခြင်း အောင်မြင်ပါသည်။");
-      tg.close(); 
-    }
-  </script>
 </body>
 </html>
